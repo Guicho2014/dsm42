@@ -1,0 +1,14 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ReservasService } from './reservas.service.js';
+import { ReservasController } from './reservas.controller.js';
+import { Reserva } from './entities/reserva.entity.js';
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([Reserva], "hotel-connection")
+  ],
+  controllers: [ReservasController],
+  providers: [ReservasService],
+})
+export class ReservasModule {}
