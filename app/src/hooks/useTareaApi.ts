@@ -16,7 +16,7 @@ export const useTareaApi = (): UseTareaApi => {
 
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
   const [ listTarea, setListTarea ] = useState<TareaResponse[]>([]);
-  const urlApi = "http://192.168.7.6:3000/tareas"; // Verifica tu IP aquí
+  const urlApi = "http://192.168.100.139:3000/tareas"; // Verifica tu IP aquí
 
   const loadTareas = async () => {
     setIsLoading(true);

@@ -16,7 +16,7 @@ export const useUserApi = (): UseUserApi => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [ listUser, setListUser ] = useState<UserRespose[]>([]);
- const urlApi = "http://192.168.7.6:3000/users";
+ const urlApi = "http://192.168.100.139:3000/users";
   const loadUsers = async () => {
     setIsLoading(true);
     const response = await pandoraApi.get<UserRespose[]>( urlApi );

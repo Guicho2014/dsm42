@@ -8,6 +8,7 @@ import { PokemonNavigator } from "./PokemonNavigator";
 import { useWindowDimensions } from "react-native";
 import { UserStackNavigator } from "./UserStackNavigator";
 import { TareaStackNavigator } from "./TareaStackNavigator";
+import { DataResponseScreen } from "../screens/DataResponseScreen"; 
 
 export type RootDrawerParams = {
   FormScreen:           undefined;
@@ -17,6 +18,7 @@ export type RootDrawerParams = {
   StackNavigator:       undefined;
   UserStackNavigator:   undefined;
   TareaStackNavigator:  undefined;
+  DataResponseScreen:   undefined; 
 }
 
 const Drawer = createDrawerNavigator<RootDrawerParams>();
@@ -42,6 +44,18 @@ export const DrawerNavigator = ({route}:any) => {
       drawerContent={ (props) => <DrawerMenu {...props} user={user}/> }
     >
       <Drawer.Screen name='TareaStackNavigator' component={TareaStackNavigator} />
+      
+      {/* 👇 AQUÍ ESTÁ LA OPCIÓN A APLICADA */}
+      <Drawer.Screen 
+        name='DataResponseScreen' 
+        component={DataResponseScreen} 
+        options={{ 
+          title: 'Monitor Sensor',
+          headerStyle: { backgroundColor: '#0f172a' }, // Fondo oscuro igual a tu pantalla
+          headerTintColor: '#f1f5f9',                   // Color del texto y el icono
+        }} 
+      />
+
       <Drawer.Screen name='StackNavigator' component={StackNavigator} />
       <Drawer.Screen name='PokemonNavigator' component={PokemonNavigator} />
       <Drawer.Screen name='FormScreen' component={FormScreen} />

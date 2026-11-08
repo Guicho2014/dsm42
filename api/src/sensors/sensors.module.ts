@@ -5,11 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Sensor } from './entities/sensor.entity.js';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Sensor
-    ],"mariadb-connection"),
-  ],
+  imports: [TypeOrmModule.forFeature([Sensor], 'mariadb-connection')],
   controllers: [SensorsController],
   providers: [SensorsService],
 })

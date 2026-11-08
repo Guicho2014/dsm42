@@ -50,6 +50,10 @@ export const DrawerMenu = ( { navigation, user }: Props ) => {
           <BtnMenu text="Localización" action={ () => navigation.navigate('LocationScreen') } />
           <BtnMenu text="Gestión de Usuarios" action={ () => navigation.navigate('UserStackNavigator') } />
           <BtnMenu text="Tareas" action={ () => navigation.navigate('TareaStackNavigator') } />
+          
+          {/* 👇 NUEVO BOTÓN AQUÍ */}
+          <BtnMenu text="Monitor Sensor" action={ () => navigation.navigate('DataResponseScreen') } />
+          
         </View>
       </View>
 

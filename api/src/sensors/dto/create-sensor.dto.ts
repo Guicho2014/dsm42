@@ -1,8 +1,9 @@
-import { IsDateString, IsNotEmpty, IsNumber } from "class-validator";
+import { IsDateString, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+
 export class CreateSensorDto {
   @IsDateString()
-  @IsNotEmpty()
-  fecha?: Date;
+  @IsOptional()
+  fecha?: string;
 
   @IsNumber()
   @IsNotEmpty()
@@ -11,4 +12,12 @@ export class CreateSensorDto {
   @IsNumber()
   @IsNotEmpty()
   distancia_inch: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  temperatura_celcius: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  temperatura_f: number;
 }

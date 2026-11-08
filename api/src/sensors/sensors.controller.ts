@@ -1,14 +1,66 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ValidationPipe,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { SensorsService } from './sensors.service.js';
 import { CreateSensorDto } from './dto/create-sensor.dto.js';
 import { UpdateSensorDto } from './dto/update-sensor.dto.js';
+import { Sensor } from './entities/sensor.entity.js';
+import * as express from 'express';
 
 @Controller('sensors')
 export class SensorsController {
   constructor(private readonly sensorsService: SensorsService) {}
 
+  // ════════════════════════════════════════════════════════════════
+  // /consultas/* PRIMERO — si van después de :id_sensor, NestJS
+  // las atrapa como si fueran un id.
+  // ════════════════════════════════════════════════════════════════
+
+  @Get('consultas/total')
+  total() {
+    return this.sensorsService.total();
+  }
+
+  @Get('consultas/data')
+  async data() {
+    return await this.sensorsService.data();
+  }
+
+  @Get('consultas/paginado')
+  paginado(
+    @Query('pagina') pagina: number = 1,
+    @Query('limite') limite: number = 50,
+    @Req() request: express.Request,
+  ) {
+    const baseUrl = `${request.protocol}://${request.get('host')}${
+      request.originalUrl.split('?')[0]
+    }`;
+    return this.sensorsService.paginado(pagina, limite, baseUrl);
+  }
+
+  @Post('consultas/insertar-masivo')
+  async interMasivo(@Body() lecturas: Sensor[]) {
+    await this.sensorsService.interMasivo(
+      lecturas.map((l) => ({
+        ...l,
+        fecha: l.fecha ? new Date(l.fecha) : undefined,
+      })),
+    );
+    return { datos_ingresados: lecturas.length };
+  }
+
+
   @Post()
-  create(@Body( new ValidationPipe() ) createSensorDto: CreateSensorDto) {
+  create(@Body(new ValidationPipe()) createSensorDto: CreateSensorDto) {
     return this.sensorsService.create(createSensorDto);
   }
 
@@ -23,7 +75,10 @@ export class SensorsController {
   }
 
   @Patch(':id_sensor')
-  update(@Param('id_sensord') id_sensor: number, @Body( new ValidationPipe() ) updateSensorDto: UpdateSensorDto) {
+  update(
+    @Param('id_sensor') id_sensor: number, // ← typo corregido
+    @Body(new ValidationPipe()) updateSensorDto: UpdateSensorDto,
+  ) {
     return this.sensorsService.update(id_sensor, updateSensorDto);
   }
 

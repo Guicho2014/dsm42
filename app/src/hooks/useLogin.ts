@@ -10,8 +10,8 @@ export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const urlLogin = "http://192.168.7.6:3000/users/login";
-  const urlRegister = "http://192.168.7.6:3000/users";
+  const urlLogin = "http://192.168.100.139:3000/users/login";
+  const urlRegister = "http://192.168.100.139:3000/users";
 
   const resetForm = () => {
     setEmail('');
