@@ -1,33 +1,35 @@
 import { useEffect, useState } from "react";
 import * as Location from 'expo-location';
 
-interface UseLocation{
+interface UseLocation {
   location: Location.LocationObject | null;
   error: string | null;
 }
 
 export const useLocation = (): UseLocation => {
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const [ location, setLocation ] = useState<Location.LocationObject | null>(null);
-  const [ error, setError ] = useState<string|null>(null);
+  useEffect(() => {
+    (async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
 
-  useEffect( () => {
-    ( async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      
-      if( status != "granted" ){
-        setError("Permiso de ubicación negado.");
-        return;
+        if (status !== "granted") {
+          setError("Permiso de ubicación denegado.");
+          return;
+        }
+
+        const loc = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        });
+
+        setLocation(loc);
+      } catch (e) {
+        setError("Ubicación no disponible en esta versión de la app.");
       }
-
-      const loc = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Highest
-      });
-
-      setLocation(loc);
-
     })();
-  },[]);
+  }, []);
 
   return { location, error };
-}
+};

@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "privacy": "https://guicho2014.github.io/dsm42/privacidad.html",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.guicho2014.dsm42"
@@ -49,6 +48,7 @@
       "expo-status-bar"
     ],
     "extra": {
+      "privacyUrl": "https://guicho2014.github.io/dsm42/privacidad.html",
       "eas": {
         "projectId": "8c957460-5164-4520-8637-1b0f1be14fd4"
       }
