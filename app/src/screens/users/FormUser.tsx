@@ -7,7 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { StackUserParams } from '../../navigator/UserStackNavigator';
 import { useFormUser } from '../../hooks/useFormUser';
 import { useImagePicker } from '../../hooks/useImagePicker';
-import { useLocation } from '../../hooks/useLocation';
 
 interface Props extends StackScreenProps<StackUserParams, 'FormUser'>{};
 
@@ -15,7 +14,6 @@ export const FormUser = ( { navigation, route }:Props ) => {
 
   const { state, handleInputChange, handleSubmit, handleDelete  } = useFormUser();
   const { image64, pickImage } = useImagePicker();
-  const { location } = useLocation();
 
   useEffect( () => {
     console.log(' useEffect inicial. route.params:', route.params ? 'SÍ' : 'NO');
@@ -28,17 +26,7 @@ export const FormUser = ( { navigation, route }:Props ) => {
     }
   }, []);
 
-  
-  useEffect( () => {
-    if (location?.coords) {
-      handleInputChange(
-        "location",
-        `${location.coords.latitude},${location.coords.longitude}`
-      );
-    }
-  }, [location]);
 
- 
   useEffect( () => {
     console.log('useEffect image64 disparado. image64:', image64 ? `SÍ (${image64.length} chars)` : 'NO');
     if (image64) {
