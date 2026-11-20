@@ -20,10 +20,6 @@ import * as express from 'express';
 export class SensorsController {
   constructor(private readonly sensorsService: SensorsService) {}
 
-  // ════════════════════════════════════════════════════════════════
-  // /consultas/* PRIMERO — si van después de :id_sensor, NestJS
-  // las atrapa como si fueran un id.
-  // ════════════════════════════════════════════════════════════════
 
   @Get('consultas/total')
   total() {
@@ -76,7 +72,7 @@ export class SensorsController {
 
   @Patch(':id_sensor')
   update(
-    @Param('id_sensor') id_sensor: number, // ← typo corregido
+    @Param('id_sensor') id_sensor: number,
     @Body(new ValidationPipe()) updateSensorDto: UpdateSensorDto,
   ) {
     return this.sensorsService.update(id_sensor, updateSensorDto);

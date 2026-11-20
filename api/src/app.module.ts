@@ -10,6 +10,7 @@ import { TareasModule } from './tareas/tareas.module.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity.js';
 import { UsersModule } from './users/users.module.js';
+import { EmpleadosModule } from './empleados/empleados.module.js';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { UsersModule } from './users/users.module.js';
     }),
     UsersModule,
     SensorsModule,
+    EmpleadosModule,
     TareasModule,
     ReservasModule,
   ],

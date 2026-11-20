@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { pandoraApi } from "../api/pandoraApi";
 import { TareaResponse } from "../interfaces/pandoraApiRest";
 import { FormTareaData } from "./useFormTarea";
+import { ConfigContext } from "../context/ConfigContext";
 
 interface UseTareaApi {
   isLoading:   boolean;
@@ -13,15 +14,15 @@ interface UseTareaApi {
 }
 
 export const useTareaApi = (): UseTareaApi => {
+  const { ip } = useContext(ConfigContext);
 
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
   const [ listTarea, setListTarea ] = useState<TareaResponse[]>([]);
-  const urlApi = "http://192.168.100.139:3000/tareas"; // Verifica tu IP aquí
 
   const loadTareas = async () => {
     setIsLoading(true);
     try {
-      const response = await pandoraApi.get<TareaResponse[]>( urlApi );
+      const response = await pandoraApi.get<TareaResponse[]>(`http://${ip}:3000/tareas`);
       setListTarea( response.data );
     } catch (error) {
       console.log('Error al cargar tareas:', error);
@@ -38,10 +39,10 @@ export const useTareaApi = (): UseTareaApi => {
       titulo:      data.titulo,
       descripcion: data.descripcion,
       estado:      data.estado,
-      fecha_vencimiento: data.fecha_vencimiento, // 👈 AGREGADO AQUÍ
+      fecha_vencimiento: data.fecha_vencimiento,
     }
     try {
-      await pandoraApi.post( urlApi, dataBody );
+      await pandoraApi.post( `http://${ip}:3000/tareas`, dataBody );
       await loadTareas();
     } catch (error) {
       console.log('Error al crear tarea:', error);
@@ -53,10 +54,10 @@ export const useTareaApi = (): UseTareaApi => {
       titulo:      data.titulo,
       descripcion: data.descripcion,
       estado:      data.estado,
-      fecha_vencimiento: data.fecha_vencimiento, // 👈 AGREGADO AQUÍ
+      fecha_vencimiento: data.fecha_vencimiento,
     }
     try {
-      await pandoraApi.patch( `${urlApi}/${data.id_tarea}`, dataBody );
+      await pandoraApi.patch( `http://${ip}:3000/tareas/${data.id_tarea}`, dataBody );
       await loadTareas();
     } catch (error) {
       console.log('Error al actualizar tarea:', error);
@@ -65,7 +66,7 @@ export const useTareaApi = (): UseTareaApi => {
 
   const deleteTarea = async ( data: FormTareaData ) => {
     try {
-      await pandoraApi.delete( `${urlApi}/${data.id_tarea}`);
+      await pandoraApi.delete( `http://${ip}:3000/tareas/${data.id_tarea}`);
       await loadTareas();
     } catch (error) {
       console.log('Error al eliminar tarea:', error);

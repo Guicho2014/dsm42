@@ -10,8 +10,14 @@ interface BtnProps {
 const BtnMenu = ( { action, text, isLogout }:BtnProps ) => {
   return (
     <TouchableOpacity onPress={ action }>
-      <View style={[ style.textBg, isLogout && { backgroundColor: '#FFE4E1', borderColor: '#EF4444' } ]}>
-        <Text style={[ style.text, isLogout && { color: '#EF4444' } ]}>
+      <View style={[ 
+        style.textBg, 
+        isLogout && { backgroundColor: '#FFE4E1', borderColor: '#EF4444' } 
+      ]}>
+        <Text style={[ 
+          style.text, 
+          isLogout && { color: '#EF4444' } 
+        ]}>
           { text }
         </Text>
       </View>
@@ -33,16 +39,19 @@ export const DrawerMenu = ( { navigation, user }: Props ) => {
   const imageUri = user?.image ? `data:image/png;base64,${user.image}` : defaultImage;
 
   return (
-    <DrawerContentScrollView contentContainerStyle={{ flex: 1 }}>
-      <View style={ style.container }>
-        <View style={ style.avatarBorder }>
-          <Image style={ style.avatar } source={{ uri: imageUri }} />
+    <DrawerContentScrollView 
+      contentContainerStyle={style.scrollContainer}
+    >
+      <View style={style.container}>
+        <View style={style.avatarBorder}>
+          <Image style={style.avatar} source={{ uri: imageUri }} />
         </View>
-        <Text style={ style.username }>
+        
+        <Text style={style.username}>
           { user?.username || 'Usuario' }
         </Text>
         
-        <View style={ style.container }>
+        <View style={style.container}>
           <BtnMenu text="Pokedex" action={ () => navigation.navigate('PokemonNavigator') } />
           <BtnMenu text="Palitos y bolitas" action={ () => navigation.navigate('StackNavigator') } />
           <BtnMenu text="Formulario" action={ () => navigation.navigate('FormScreen') } />
@@ -50,16 +59,13 @@ export const DrawerMenu = ( { navigation, user }: Props ) => {
           <BtnMenu text="Localización" action={ () => navigation.navigate('LocationScreen') } />
           <BtnMenu text="Gestión de Usuarios" action={ () => navigation.navigate('UserStackNavigator') } />
           <BtnMenu text="Tareas" action={ () => navigation.navigate('TareaStackNavigator') } />
-          
-          {/* 👇 NUEVO BOTÓN AQUÍ */}
           <BtnMenu text="Monitor Sensor" action={ () => navigation.navigate('DataResponseScreen') } />
-          
+          <BtnMenu text="Empleados" action={ () => navigation.navigate('EmpleadosScreen') } />
+          <BtnMenu text="Ajustes de Red" action={ () => navigation.navigate('ConfigScreen') } />
         </View>
       </View>
 
-      <View style={{ flex: 1 }} />
-
-      <View style={{ paddingBottom: 20, alignItems: 'center' }}>
+      <View style={style.logoutContainer}>
         <BtnMenu text="Cerrar Sesión" action={ handleLogout } isLogout={true} />
       </View>
     </DrawerContentScrollView>
@@ -67,10 +73,52 @@ export const DrawerMenu = ( { navigation, user }: Props ) => {
 }
 
 const style = StyleSheet.create({
-  container: { alignItems: 'center', justifyContent: 'center' },
-  textBg: { backgroundColor: 'white', borderColor: 'violet', borderRadius: 10, borderWidth: 5, marginTop: 10, width: 240 },
-  text: { color: "black", fontSize: 25, textAlign: 'center' },
-  avatar: { borderColor: 'gray', borderRadius: 100, borderWidth: 10, height: 180, width: 180 },
-  avatarBorder: { borderColor: 'white', borderRadius: 100, borderWidth: 10, height: 200, width: 200 },
-  username: { fontSize: 40, color: "white", fontWeight: 'bold', marginBottom: 20 }
+  scrollContainer: { 
+    flexGrow: 1, 
+    justifyContent: 'space-between', 
+    paddingBottom: 20 
+  },
+  container: { 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
+  textBg: { 
+    backgroundColor: 'white', 
+    borderColor: 'violet', 
+    borderRadius: 10, 
+    borderWidth: 5, 
+    marginTop: 10, 
+    width: 240 
+  },
+  text: { 
+    color: "black", 
+    fontSize: 20, 
+    textAlign: 'center',
+    paddingVertical: 5 
+  },
+  avatar: { 
+    borderColor: 'gray', 
+    borderRadius: 100, 
+    borderWidth: 10, 
+    height: 120, 
+    width: 120 
+  },
+  avatarBorder: { 
+    borderColor: 'white', 
+    borderRadius: 100, 
+    borderWidth: 10, 
+    height: 140, 
+    width: 140,
+    marginTop: 10
+  },
+  username: { 
+    fontSize: 30, 
+    color: "white", 
+    fontWeight: 'bold', 
+    marginBottom: 10 
+  },
+  logoutContainer: {
+    marginTop: 20, 
+    alignItems: 'center'
+  }
 });

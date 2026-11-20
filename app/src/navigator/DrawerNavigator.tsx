@@ -9,6 +9,9 @@ import { useWindowDimensions } from "react-native";
 import { UserStackNavigator } from "./UserStackNavigator";
 import { TareaStackNavigator } from "./TareaStackNavigator";
 import { DataResponseScreen } from "../screens/DataResponseScreen"; 
+import { EmpleadosScreen } from "../screens/empleados/EmpleadosScreen";
+import { ListaEmpleadosScreen } from "../screens/empleados/ListaEmpleadosScreen";
+import { ConfigScreen } from "../screens/ConfigScreen"; 
 
 export type RootDrawerParams = {
   FormScreen:           undefined;
@@ -19,6 +22,9 @@ export type RootDrawerParams = {
   UserStackNavigator:   undefined;
   TareaStackNavigator:  undefined;
   DataResponseScreen:   undefined; 
+  EmpleadosScreen:      undefined;
+  ListaEmpleadosScreen: { tipo: 'tecnologia' | 'contratados-2022' } | undefined;
+  ConfigScreen:         undefined; 
 }
 
 const Drawer = createDrawerNavigator<RootDrawerParams>();
@@ -45,14 +51,43 @@ export const DrawerNavigator = ({route}:any) => {
     >
       <Drawer.Screen name='TareaStackNavigator' component={TareaStackNavigator} />
       
-      {/* 👇 AQUÍ ESTÁ LA OPCIÓN A APLICADA */}
       <Drawer.Screen 
         name='DataResponseScreen' 
         component={DataResponseScreen} 
         options={{ 
           title: 'Monitor Sensor',
-          headerStyle: { backgroundColor: '#0f172a' }, // Fondo oscuro igual a tu pantalla
-          headerTintColor: '#f1f5f9',                   // Color del texto y el icono
+          headerStyle: { backgroundColor: '#0f172a' }, 
+          headerTintColor: '#f1f5f9',                 
+        }} 
+      />
+
+      <Drawer.Screen 
+        name='EmpleadosScreen' 
+        component={EmpleadosScreen} 
+        options={{ 
+          title: 'Monitor Empleados',
+          headerStyle: { backgroundColor: '#0f172a' }, 
+          headerTintColor: '#f1f5f9',                 
+        }} 
+      />
+
+      <Drawer.Screen 
+        name='ListaEmpleadosScreen' 
+        component={ListaEmpleadosScreen} 
+        options={{ 
+          title: 'Lista Empleados',
+          headerStyle: { backgroundColor: '#0f172a' }, 
+          headerTintColor: '#f1f5f9',                 
+        }} 
+      />
+
+      <Drawer.Screen 
+        name='ConfigScreen' 
+        component={ConfigScreen} 
+        options={{ 
+          title: 'Ajustes de Red',
+          headerStyle: { backgroundColor: '#0f172a' }, 
+          headerTintColor: '#f1f5f9',                 
         }} 
       />
 

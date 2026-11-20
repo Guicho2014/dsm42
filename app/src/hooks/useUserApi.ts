@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { pandoraApi } from "../api/pandoraApi";
 import { UserRespose } from "../interfaces/pandoraApiRest";
 import { FormUserData } from "./useFormUser";
+import { ConfigContext } from "../context/ConfigContext";
 
 interface UseUserApi{
   isLoading:  boolean;
@@ -13,14 +14,19 @@ interface UseUserApi{
 }
 
 export const useUserApi = (): UseUserApi => {
+  const { ip } = useContext(ConfigContext);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [ listUser, setListUser ] = useState<UserRespose[]>([]);
- const urlApi = "http://192.168.100.139:3000/users";
+
   const loadUsers = async () => {
     setIsLoading(true);
-    const response = await pandoraApi.get<UserRespose[]>( urlApi );
-    setListUser( response.data );
+    try {
+      const response = await pandoraApi.get<UserRespose[]>( `http://${ip}:3000/users` );
+      setListUser( response.data );
+    } catch (error) {
+      console.log(error);
+    }
     setIsLoading(false);
   }
 
@@ -36,40 +42,45 @@ export const useUserApi = (): UseUserApi => {
       image: data.image,
       location: data.location
     }
-
-    await pandoraApi.post( urlApi, dataBody );
-
+    try {
+      await pandoraApi.post( `http://${ip}:3000/users`, dataBody );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const updateUser = async ( data: FormUserData ) => {
-    if ( data.password ){
-      const dataBody = {
-        username: data.username,
-        password: data.password,
-        email: data.email,
-        image: data.image,
-        location: data.location
+    try {
+      if ( data.password ){
+        const dataBody = {
+          username: data.username,
+          password: data.password,
+          email: data.email,
+          image: data.image,
+          location: data.location
+        }
+        await pandoraApi.patch( `http://${ip}:3000/users/${data.id_user}`, dataBody );
+      }else {
+        const dataBody = {
+          username: data.username,
+          email: data.email,
+          image: data.image,
+          location: data.location
+        }
+        await pandoraApi.patch( `http://${ip}:3000/users/${data.id_user}`, dataBody );
       }
-
-      await pandoraApi.patch( `${urlApi}/${data.id_user}`, dataBody );
-    }else {
-      const dataBody = {
-        username: data.username,
-        email: data.email,
-        image: data.image,
-        location: data.location
-      }
-      await pandoraApi.patch( `${urlApi}/${data.id_user}`, dataBody );
+    } catch (error) {
+      console.log(error);
     }
-
   }
 
   const deleteUser = async ( data: FormUserData ) => {
-
-    await pandoraApi.delete( `${urlApi}/${data.id_user}`);
-
+    try {
+      await pandoraApi.delete( `http://${ip}:3000/users/${data.id_user}`);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return { isLoading, listUser, loadUsers, createUser, updateUser, deleteUser };
-   
 }

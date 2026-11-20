@@ -36,6 +36,19 @@ export const LoginScreen = () => {
     }
   };
 
+  const handleGuest = () => {
+    const fakeUser = {
+      id_user: 0,
+      username: 'Invitado (Demo)',
+      email: 'invitado@demo.com',
+      password: '',
+      image: '',
+      location: '',
+      update: new Date()
+    };
+    navigation.replace('DrawerNavigator', { user: fakeUser });
+  };
+
   return (
     <ImageBackground 
       source={require('../../../assets/fondo.jpeg')}
@@ -43,6 +56,15 @@ export const LoginScreen = () => {
       resizeMode="cover"
     >
       <View style={style.overlay}>
+        <TouchableOpacity 
+          style={style.configButton}
+          onPress={() => navigation.navigate('ConfigScreen')}
+        >
+          <Text style={style.configButtonText}>
+            ⚙️ Ajustes de Red
+          </Text>
+        </TouchableOpacity>
+
         <View style={style.darkSection}>
           
           <View style={style.tabsContainer}>
@@ -123,6 +145,15 @@ export const LoginScreen = () => {
             ) : (
               <Text style={style.buttonText}>{isLoginTab ? 'Iniciar Sesión' : 'Registrarse'}</Text>
             )}
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={style.guestButton} 
+            onPress={handleGuest}
+          >
+            <Text style={style.guestButtonText}>
+              Entrar como Invitado (Modo Demo)
+            </Text>
           </TouchableOpacity>
 
         </View>

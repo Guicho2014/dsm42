@@ -1,17 +1,16 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { pandoraApi } from '../api/pandoraApi';
 import { UserRespose } from '../interfaces/pandoraApiRest';
+import { ConfigContext } from '../context/ConfigContext';
 
 export const useLogin = () => {
+  const { ip } = useContext(ConfigContext);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const urlLogin = "http://192.168.100.139:3000/users/login";
-  const urlRegister = "http://192.168.100.139:3000/users";
 
   const resetForm = () => {
     setEmail('');
@@ -28,16 +27,15 @@ export const useLogin = () => {
     setIsLoading(true);
     setError(null);
 
-    console.log('Datos que viajan al backend:', { email, password });
-
     try {
+      const urlLogin = `http://${ip}:3000/users/login`;
       const response = await pandoraApi.post<UserRespose | false>(urlLogin, { email, password });
       if (response.data) {
         onSuccess(response.data);
       } else {
         setError('Correo o contraseña incorrectos');
       }
-    } catch (err: any) {
+    } catch {
       setError('Error al conectar con el servidor');
     } finally {
       setIsLoading(false);
@@ -53,6 +51,7 @@ export const useLogin = () => {
     setError(null);
 
     try {
+      const urlRegister = `http://${ip}:3000/users`;
       await pandoraApi.post(urlRegister, {
         username,
         email,
@@ -61,8 +60,7 @@ export const useLogin = () => {
         image: image64 || 'default'
       });
       onSuccess();
-    } catch (err: any) {
-      console.log(err);
+    } catch {
       setError('Error al crear la cuenta');
     } finally {
       setIsLoading(false);

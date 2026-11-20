@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { pandoraApi } from "../api/pandoraApi";
+import { ConfigContext } from "../context/ConfigContext";
 
 export interface SensorDataResponse {
   total: number;
@@ -21,14 +22,15 @@ export interface SensorDataResponse {
 }
 
 export const useDataResponse = () => {
+  const { ip } = useContext(ConfigContext);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<SensorDataResponse | null>(null);
-  const urlApi = "http://192.168.100.139:3000/sensors/consultas/data";
 
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const response = await pandoraApi.get<SensorDataResponse>(urlApi);
+      const response = await pandoraApi.get<SensorDataResponse>(`http://${ip}:3000/sensors/consultas/data`);
       setData(response.data);
     } catch (error) {
       console.log("Error al cargar datos del sensor:", error);
