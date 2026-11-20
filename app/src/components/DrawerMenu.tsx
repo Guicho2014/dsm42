@@ -1,5 +1,8 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { useContext } from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { DrawerContentScrollView, DrawerContentComponentProps } from "@react-navigation/drawer";
+import { ConfigContext } from "../context/ConfigContext";
+import { pandoraApi } from "../api/pandoraApi";
 
 interface BtnProps {
   action: () => void;
@@ -31,12 +34,42 @@ interface Props extends DrawerContentComponentProps {
 
 export const DrawerMenu = ( { navigation, user }: Props ) => {
 
+  const { ip } = useContext(ConfigContext);
+
   const handleLogout = () => {
     navigation.getParent()?.navigate('Login');
   };
 
-  const defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkeEo_JMBF7RZeBZEZdlDMuV7Eyp6Xt1YlNGG0UrUWhyys3bmgGb9SIUs&s=10';
-  const imageUri = user?.image ? `data:image/png;base64,${user.image}` : defaultImage;
+  const deleteAccount = async () => {
+    try {
+      await pandoraApi.delete(`http://${ip}:3000/users/${user.id_user}`);
+      Alert.alert('Cuenta eliminada', 'Tu cuenta y tus datos fueron eliminados.');
+      navigation.getParent()?.navigate('Login');
+    } catch {
+      Alert.alert(
+        'No se pudo eliminar',
+        'Verifica tu conexión con el servidor e inténtalo de nuevo.'
+      );
+    }
+  };
+
+  const handleDeleteAccount = () => {
+    if (!user?.id_user) return;
+    Alert.alert(
+      'Eliminar mi cuenta',
+      'Se borrarán tu cuenta y tus datos (nombre de usuario, correo, contraseña y foto). Esta acción no se puede deshacer.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Eliminar', style: 'destructive', onPress: deleteAccount },
+      ]
+    );
+  };
+
+  // Los usuarios sin foto se guardan con la cadena 'default'.
+  const hasPhoto = !!user?.image && user.image !== 'default';
+  const imageSource = hasPhoto
+    ? { uri: `data:image/png;base64,${user.image}` }
+    : require('../../assets/default-avatar.png');
 
   return (
     <DrawerContentScrollView 
@@ -44,7 +77,7 @@ export const DrawerMenu = ( { navigation, user }: Props ) => {
     >
       <View style={style.container}>
         <View style={style.avatarBorder}>
-          <Image style={style.avatar} source={{ uri: imageUri }} />
+          <Image style={style.avatar} source={imageSource} />
         </View>
         
         <Text style={style.username}>
@@ -67,6 +100,9 @@ export const DrawerMenu = ( { navigation, user }: Props ) => {
 
       <View style={style.logoutContainer}>
         <BtnMenu text="Cerrar Sesión" action={ handleLogout } isLogout={true} />
+        { !!user?.id_user && (
+          <BtnMenu text="Eliminar mi cuenta" action={ handleDeleteAccount } isLogout={true} />
+        )}
       </View>
     </DrawerContentScrollView>
   );

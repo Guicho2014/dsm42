@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { View, Text, Alert, Image } from 'react-native';
+import { useState } from 'react';
+import { View, Text, Image } from 'react-native';
 import { appTheme } from '../theme/appTheme';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -8,18 +8,6 @@ import { BtnTouch } from '../components/BtnTouch';
 export const ImagePickerScreen = () => {
 
   const [ image64, setImage64 ] = useState<string|null>(null);
-
-  useEffect( () => {
-    ( async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if ( status !== "granted" ){
-        Alert.alert(
-          "Permiso requerido",
-          "Debes otorgar el permiso para acceder a tu galería."
-        );
-      }
-    })();
-  },[]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

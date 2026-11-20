@@ -99,4 +99,28 @@ export const loginTheme = StyleSheet.create({
     width: 80,
     height: 80,
   },
+  configButton: {
+    alignSelf: 'flex-end',
+    marginRight: 20,
+    marginBottom: 20,
+    padding: 10,
+  },
+  configButtonText: {
+    color: '#FFC0CB',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  guestButton: {
+    marginTop: 14,
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#FFF0F5',
+  },
+  guestButtonText: {
+    color: '#FFF0F5',
+    fontSize: 14,
+    fontWeight: '600',
+  },
 });
