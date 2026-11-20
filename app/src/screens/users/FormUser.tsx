@@ -16,7 +16,6 @@ export const FormUser = ( { navigation, route }:Props ) => {
   const { image64, pickImage } = useImagePicker();
 
   useEffect( () => {
-    console.log(' useEffect inicial. route.params:', route.params ? 'SÍ' : 'NO');
     if (route.params) {
       const user = route.params;
       handleInputChange("id_user", user.id_user);
@@ -28,9 +27,7 @@ export const FormUser = ( { navigation, route }:Props ) => {
 
 
   useEffect( () => {
-    console.log('useEffect image64 disparado. image64:', image64 ? `SÍ (${image64.length} chars)` : 'NO');
     if (image64) {
-      console.log('Copiando image64 al state...');
       handleInputChange('image', image64);
     }
   }, [image64]);
